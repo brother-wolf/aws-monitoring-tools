@@ -1,0 +1,7 @@
+{
+  "filter_operation": "include",
+  "filter_names": [
+    "Monitor This Pipeline",
+    "As Well As This Pipeline"
+  ]
+}

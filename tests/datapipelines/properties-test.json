@@ -1,0 +1,7 @@
+{
+  "filter_operation": "exclude",
+  "filter_names": [
+    "An Unimportant Pipeline",
+    "Another Unimportant Pipeline"
+  ]
+}

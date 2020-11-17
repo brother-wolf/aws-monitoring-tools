@@ -1,6 +1,6 @@
 [package]
 name = "aws-monitoring-tools"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2018"
 
 [dependencies]
@@ -9,9 +9,9 @@ serde_json = "1.0.39"
 serde_derive = "1.0.39"
 chrono = "0.4.13"
 itertools = "0.9"
-structopt = "0.3.15"
-aws-connections-lib = { git = "https://github.com/brother-wolf/aws-connections-lib", tag = "v0.0.1" }
-aws-services-lib = { git = "https://github.com/brother-wolf/aws-services-lib", tag = "v0.0.1" }
+structopt = "0.3.20"
+aws-connections-lib = { git = "https://github.com/brother-wolf/aws-connections-lib", tag = "v0.0.5" }
+aws-services-lib = { git = "https://github.com/brother-wolf/aws-services-lib", tag = "v0.0.3" }
 rusty-toolbox = { git = "https://github.com/brother-wolf/rusty-toolbox", tag = "v0.0.1" }
 
 [[bin]]

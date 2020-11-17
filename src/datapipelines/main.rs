@@ -3,7 +3,7 @@ pub mod models;
 pub mod bitbar;
 
 use structopt::StructOpt;
-use aws_connections_lib::datapipelines::get_datapipeline_client;
+use aws_connections_lib::datapipelines::get_client;
 use aws_services_lib::datapipelines::datapipelines::status;
 use aws_services_lib::datapipelines::models::pipeline::Pipeline;
 use models::pipeline_health_visibility::PipelineHealthVisibility;
@@ -46,12 +46,12 @@ fn main() {
     let props = get_props(&opt.properties);
     let title = if opt.name.is_empty() { opt.aws_profile.clone() } else { opt.name };
     let show = PipelineHealthVisibility::from_string(&opt.show);
-    match get_datapipeline_client(&opt.aws_profile, "us-east-1") {
-        Some(client) => {
+    match get_client(&opt.aws_profile, "us-east-1") {
+        Ok(client) => {
             let pipeline_name_filters = &props.filter_names;
             let pipelines = filter_pipelines_by_health(status(&client, pipeline_name_filters, &props.filter_operation), &show);
             let pipelines_report = PipelinesReport::compile(
-                &title, 
+                &title,
                 &pipelines
             );
             let output = match opt.format.as_ref() {
@@ -60,6 +60,6 @@ fn main() {
             };
             println!("{}", output)
         },
-        None => println!("unable to establish credentials"),
+        Err(_e) => println!("unable to establish credentials"),
     };
 }

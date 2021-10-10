@@ -11,7 +11,7 @@ chrono = "0.4.13"
 itertools = "0.9"
 structopt = "0.3.20"
 aws-connections-lib = { git = "https://github.com/brother-wolf/aws-connections-lib", tag = "v0.0.5" }
-aws-services-lib = { git = "https://github.com/brother-wolf/aws-services-lib", tag = "v0.0.3" }
+aws-services-lib = { git = "https://github.com/brother-wolf/aws-services-lib", tag = "v0.0.4" }
 rusty-toolbox = { git = "https://github.com/brother-wolf/rusty-toolbox", tag = "v0.0.1" }
 
 [[bin]]

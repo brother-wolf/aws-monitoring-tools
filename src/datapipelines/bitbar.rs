@@ -1,6 +1,7 @@
 use crate::models::pipelines_report::PipelinesReport;
 use aws_services_lib::datapipelines::models::pipeline::Pipeline;
 use crate::models::pipeline_execution_status::PipelineExecutionStatus;
+use crate::models::pipeline_stats::PipelineStats;
 
 pub fn display_colour(pipelines_status: &PipelineExecutionStatus) -> &str {
     match pipelines_status {
@@ -68,6 +69,21 @@ pub fn format_body(pipeline_report: &PipelinesReport) -> Vec<String> {
     }).collect()
 }
 
+pub fn format_error_display(error_message: &str) -> String {
+    let error_report = PipelinesReport {
+        title: error_message.to_string(),
+        counts: PipelineStats {
+            healthy: 0,
+            healthy_building: 0,
+            error: -1,
+            error_building: 0
+        },
+        statuses: vec![],
+    };
+
+    let display = format_header(&error_report);
+    display.iter().fold("".to_string(), |acc, x| format!("{}\n{}", acc, x))
+}
 pub fn format_display(pipeline_report: &PipelinesReport) -> String {
     let mut display = format_header(pipeline_report);
     let mut body = format_body(pipeline_report);

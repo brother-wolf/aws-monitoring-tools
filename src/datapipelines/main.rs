@@ -15,13 +15,13 @@ use bitbar as bb;
 #[derive(StructOpt)]
 #[structopt(rename_all = "kebab-case")]
 struct Opt {
-    #[structopt(short = "f", long = "format", default_value = "json", possible_values = &vec![ "json", "bitbar" ])]
+    #[structopt(short = "f", long = "format", default_value = "json", possible_values = & vec ! [ "json", "bitbar" ])]
     format: String,
     #[structopt(short = "p", long = "properties", default_value = "")]
     properties: String,
     #[structopt(short = "a", long = "aws-profile", required = true)]
     aws_profile: String,
-    #[structopt(short = "s", long = "show", default_value = "all", possible_values = &PipelineHealthVisibility::variants())]
+    #[structopt(short = "s", long = "show", default_value = "all", possible_values = & PipelineHealthVisibility::variants())]
     show: String,
     #[structopt(short = "n", long = "name", default_value = "")]
     name: String,
@@ -49,17 +49,28 @@ fn main() {
     match get_client(&opt.aws_profile, "us-east-1") {
         Ok(client) => {
             let pipeline_name_filters = &props.filter_names;
-            let pipelines = filter_pipelines_by_health(status(&client, pipeline_name_filters, &props.filter_operation), &show);
-            let pipelines_report = PipelinesReport::compile(
-                &title,
-                &pipelines
-            );
-            let output = match opt.format.as_ref() {
-                "bitbar" => bb::format_display(&pipelines_report),
-                _ => serde_json::to_string(&pipelines_report).unwrap(),
+
+            let output = match status(&client, pipeline_name_filters, &props.filter_operation) {
+                Ok(pipeline_statuses) => {
+                    let pipelines = filter_pipelines_by_health(pipeline_statuses, &show);
+                    let pipelines_report = PipelinesReport::compile(
+                        &title,
+                        &pipelines,
+                    );
+                    match opt.format.as_ref() {
+                        "bitbar" => bb::format_display(&pipelines_report),
+                        _ => serde_json::to_string(&pipelines_report).unwrap(),
+                    }
+                }
+                Err(e) => {
+                    match opt.format.as_ref() {
+                        "bitbar" => bb::format_error_display(&e),
+                        _ => e,
+                    }
+                }
             };
             println!("{}", output)
-        },
+        }
         Err(_e) => println!("unable to establish credentials"),
     };
 }
